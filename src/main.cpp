@@ -24,7 +24,7 @@ void setup() {
     StickCP2.Display.setTextColor(GREEN);
     StickCP2.Display.setTextDatum(middle_center);
     StickCP2.Display.setFont(&fonts::FreeSansBold9pt7b);
-    StickCP2.Display.setTextSize(1);
+    StickCP2.Display.setTextSize(0.95);
     Serial.begin(115200);
     MadgwickFilter.begin(200);
     pinMode(26,INPUT_PULLUP);//スイッチがオンのとき0,スイッチがオフのとき1
@@ -34,7 +34,7 @@ void setup() {
 void loop(void) {
     auto imu_update = StickCP2.Imu.update();
     if (imu_update) {
-        StickCP2.Display.setCursor(0, 40);
+        StickCP2.Display.setCursor(0, 0);
         StickCP2.Display.clear();
 
         auto data = StickCP2.Imu.getImuData();
@@ -42,7 +42,7 @@ void loop(void) {
         // pitch =  atan(data.accel.y / (sqrt((data.accel.x *data.accel.x) + (data.accel.z * data.accel.z))+1e-6)) * 180 / pi; 
         // yaw   =  atan(sqrt((data.accel.x *data.accel.x) + (data.accel.y * data.accel.y)) / (data.accel.z +1e-6)) * 180 / pi;
         
-        MadgwickFilter.updateIMU(data.gyro.x,data.gyro.y,data.gyro.z,data.accel.x,data.accel.y,data.accel.z);
+        // MadgwickFilter.updateIMU(data.gyro.x,data.gyro.y,data.gyro.z,data.accel.x,data.accel.y,data.accel.z);
         
         sw = digitalRead(26);
 
@@ -75,47 +75,27 @@ void loop(void) {
         // Serial.printf("gyroX:%d, gyroY:%d, gyroZ:%d\n", data.gyro.x, data.gyro.y, data.gyro.z); 
 
 
-        //M5stickC-plus2が通常の向きであるときのプログラム
+        
+
         // Serial.print(MadgwickFilter.getRoll());
-        // Serial.print("sep");
-        // Serial.print(MadgwickFilter.getPitch());
         // Serial.print("sep");
         // Serial.print(MadgwickFilter.getYaw());
         // Serial.print("sep");
-        // Serial.print(!send_sw);
+        // Serial.print(MadgwickFilter.getPitch());
+        // Serial.print("sep");
+        Serial.print(!send_sw);
         // Serial.print("sep");
         // Serial.print(data.accel.x);
         // Serial.print("sep");
         // Serial.print(data.accel.y);
         // Serial.print("sep");
         // Serial.print(data.accel.z);
-        // Serial.print("sep");
-        // Serial.print(data.gyro.x);
-        // Serial.print("sep");
-        // Serial.print(data.gyro.y);
-        // Serial.print("sep");
-        // Serial.println(data.gyro.z);
-
-
-        Serial.print(MadgwickFilter.getRoll());
         Serial.print("sep");
-        Serial.print(MadgwickFilter.getPitch());
-        Serial.print("sep");
-        Serial.print(MadgwickFilter.getYaw());
-        Serial.print("sep");
-        Serial.print(!send_sw);
-        Serial.print("sep");
-        Serial.print(data.accel.x);
-        Serial.print("sep");
-        Serial.print(data.accel.y);
-        Serial.print("sep");
-        Serial.print(data.accel.z);
-        Serial.print("sep");
-        Serial.print(data.gyro.x);
+        Serial.print(data.gyro.z);
         Serial.print("sep");
         Serial.print(data.gyro.y);
         Serial.print("sep");
-        Serial.println(data.gyro.z);
+        Serial.println(data.gyro.x);
         // bts.print(MadgwickFilter.getRoll());
         // bts.print("sep");
         // bts.print(MadgwickFilter.getPitch());
@@ -138,13 +118,15 @@ void loop(void) {
 
 
 
-        StickCP2.Display.printf("IMU:\r\n");
-        StickCP2.Display.printf("%0.2f %0.2f %0.2f\r\n", data.accel.x,
-                                data.accel.y, data.accel.z);
+        // StickCP2.Display.printf("Accel:\r\n");
+        // StickCP2.Display.printf("%0.2f %0.2f %0.2f\r\n", data.accel.x,
+        //                         data.accel.y, data.accel.z);
+        StickCP2.Display.printf("Gyro:\r\n");
         StickCP2.Display.printf("%0.2f %0.2f %0.2f\r\n", data.gyro.x,
                                 data.gyro.y, data.gyro.z);
-
-        delay(1000);
+        // StickCP2.Display.printf("Roll,Pitch,Yaw:\r\n");
+        // StickCP2.Display.printf("%0.2f %0.2f %0.2f\r\n", MadgwickFilter.getRoll(),
+        //                         MadgwickFilter.getPitch(), MadgwickFilter.getYaw());
 
     }
 }
