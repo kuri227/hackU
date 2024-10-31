@@ -63,19 +63,40 @@ void loop(void) {
         // data.accel.y;      // accel y-axis value.
         // data.accel.z;      // accel z-axis value.
         // data.accel.value;  // accel 3values array [0]=x / [1]=y / [2]=z.
-
         // data.gyro.x;      // gyro x-axis value.
         // data.gyro.y;      // gyro y-axis value.
         // data.gyro.z;      // gyro z-axis value.
         // data.gyro.value;  // gyro 3values array [0]=x / [1]=y / [2]=z.
-
         // data.value;  // all sensor 9values array [0~2]=accel / [3~5]=gyro /
         //              // [6~8]=mag
-
         // Serial.printf("ax:%f  ay:%f  az:%f\r\n", data.accel.x, data.accel.y,data.accel.z);
         // Serial.printf("gx:%f  gy:%f  gz:%f\r\n", data.gyro.x, data.gyro.y,data.gyro.z);
         // Serial.printf("accelX:%d, accelY:%d, accelZ:%d\n", data.accel.x, data.accel.y, data.accel.z);
         // Serial.printf("gyroX:%d, gyroY:%d, gyroZ:%d\n", data.gyro.x, data.gyro.y, data.gyro.z); 
+
+
+        //M5stickC-plus2が通常の向きであるときのプログラム
+        // Serial.print(MadgwickFilter.getRoll());
+        // Serial.print("sep");
+        // Serial.print(MadgwickFilter.getPitch());
+        // Serial.print("sep");
+        // Serial.print(MadgwickFilter.getYaw());
+        // Serial.print("sep");
+        // Serial.print(!send_sw);
+        // Serial.print("sep");
+        // Serial.print(data.accel.x);
+        // Serial.print("sep");
+        // Serial.print(data.accel.y);
+        // Serial.print("sep");
+        // Serial.print(data.accel.z);
+        // Serial.print("sep");
+        // Serial.print(data.gyro.x);
+        // Serial.print("sep");
+        // Serial.print(data.gyro.y);
+        // Serial.print("sep");
+        // Serial.println(data.gyro.z);
+
+
         Serial.print(MadgwickFilter.getRoll());
         Serial.print("sep");
         Serial.print(MadgwickFilter.getPitch());
@@ -95,26 +116,25 @@ void loop(void) {
         Serial.print(data.gyro.y);
         Serial.print("sep");
         Serial.println(data.gyro.z);
-
-        bts.print(MadgwickFilter.getRoll());
-        bts.print("sep");
-        bts.print(MadgwickFilter.getPitch());
-        bts.print("sep");
-        bts.print(MadgwickFilter.getYaw());
-        bts.print("sep");
-        bts.print(!send_sw);
-        bts.print("sep");
-        bts.print(data.accel.x);
-        bts.print("sep");
-        bts.print(data.accel.y);
-        bts.print("sep");
-        bts.print(data.accel.z);
-        bts.print("sep");
-        bts.print(data.gyro.x);
-        bts.print("sep");
-        bts.print(data.gyro.y);
-        bts.print("sep");
-        bts.println(data.gyro.z);
+        // bts.print(MadgwickFilter.getRoll());
+        // bts.print("sep");
+        // bts.print(MadgwickFilter.getPitch());
+        // bts.print("sep");
+        // bts.print(MadgwickFilter.getYaw());
+        // bts.print("sep");
+        // bts.print(!send_sw);
+        // bts.print("sep");
+        // bts.print(data.accel.x);
+        // bts.print("sep");
+        // bts.print(data.accel.y);
+        // bts.print("sep");
+        // bts.print(data.accel.z);
+        // bts.print("sep");
+        // bts.print(data.gyro.x);
+        // bts.print("sep");
+        // bts.print(data.gyro.y);
+        // bts.print("sep");
+        // bts.println(data.gyro.z);
 
 
 
@@ -123,6 +143,8 @@ void loop(void) {
                                 data.accel.y, data.accel.z);
         StickCP2.Display.printf("%0.2f %0.2f %0.2f\r\n", data.gyro.x,
                                 data.gyro.y, data.gyro.z);
+
+        delay(1000);
 
     }
 }
