@@ -15,7 +15,9 @@ bool sw;
 
 BluetoothSerial bts;
 
-
+float gyroBiasX;
+float gyroBiasY;
+float gyroBiasZ;
 
 void setup() {
     auto cfg = M5.config();
@@ -29,6 +31,22 @@ void setup() {
     MadgwickFilter.begin(200);
     pinMode(26,INPUT_PULLUP);//スイッチがオンのとき0,スイッチがオフのとき1
     bts.begin("M5-stickC-plus2");
+
+    delay(1000); // 安定させるための待機
+
+    // ジャイロの初期バイアス測定
+    int num_samples = 100;
+    for (int i = 0; i < num_samples; i++) {
+        StickCP2.Imu.update();
+        auto data = StickCP2.Imu.getImuData();
+        gyroBiasX += data.gyro.x;
+        gyroBiasY += data.gyro.y;
+        gyroBiasZ += data.gyro.z;
+        delay(10);
+    }
+    gyroBiasX /= num_samples;
+    gyroBiasY /= num_samples;
+    gyroBiasZ /= num_samples;
 }
 
 void loop(void) {
@@ -41,6 +59,11 @@ void loop(void) {
         // roll  =  atan(data.accel.x / (sqrt((data.accel.y * data.accel.y) + (data.accel.z * data.accel.z))+1e-6)) * 180 / pi; 
         // pitch =  atan(data.accel.y / (sqrt((data.accel.x *data.accel.x) + (data.accel.z * data.accel.z))+1e-6)) * 180 / pi; 
         // yaw   =  atan(sqrt((data.accel.x *data.accel.x) + (data.accel.y * data.accel.y)) / (data.accel.z +1e-6)) * 180 / pi;
+
+        // バイアスを引く
+        float correctedGyroX = data.gyro.x - gyroBiasX;
+        float correctedGyroY = data.gyro.y - gyroBiasY;
+        float correctedGyroZ = data.gyro.z - gyroBiasZ;
         
         // MadgwickFilter.updateIMU(data.gyro.x,data.gyro.y,data.gyro.z,data.accel.x,data.accel.y,data.accel.z);
         
@@ -91,11 +114,11 @@ void loop(void) {
         // Serial.print("sep");
         // Serial.print(data.accel.z);
         Serial.print("sep");
-        Serial.print(data.gyro.z);
+        Serial.print(correctedGyroZ);
         Serial.print("sep");
-        Serial.print(data.gyro.y);
+        Serial.print(correctedGyroY);
         Serial.print("sep");
-        Serial.println(data.gyro.x);
+        Serial.println(correctedGyroX);
         // bts.print(MadgwickFilter.getRoll());
         // bts.print("sep");
         // bts.print(MadgwickFilter.getPitch());
